@@ -1,4 +1,4 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿<div class="top-row ps-2 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">ServerManagement</a>
     </div>
@@ -8,15 +8,20 @@
 
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
     <nav class="flex-column">
-        <div class="nav-item px-3">
+        <div class="nav-item px-2">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                 <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
             </NavLink>
         </div>
 
-        <div class="nav-item px-3">
+        <div class="nav-item px-2">
             <NavLink class="nav-link" href="weather">
                 <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
+            </NavLink>
+        </div>
+        <div class="nav-item px-2">
+            <NavLink class="nav-link" href="/servers">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span>Manage Servers
             </NavLink>
         </div>
     </nav>

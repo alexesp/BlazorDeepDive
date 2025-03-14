@@ -1,0 +1,34 @@
+﻿@* @page "/servers/edit" *@
+@* @page "/servers/{id}" *@
+@page "/servers/{id:int}"
+<h3>Edit Server</h3>
+
+@if(server != null)
+{
+	<p>
+		@server.Name
+	</p>
+	<p>
+		@server.City
+	</p>
+}
+
+
+@* @Id *@
+@code {
+	[Parameter]
+	public int Id { get; set; }
+
+	private Server? server;
+
+	protected override void OnParametersSet()
+	{
+		// base.OnParametersSet();
+		server = ServersRepository.GetServerById(this.Id);
+	}
+
+	// protected override Task OnParametersSetAsync()
+	// {
+	// 	return base.OnParametersSetAsync();
+	// }
+}
