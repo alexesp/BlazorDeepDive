@@ -19,7 +19,7 @@
 						<button type="button" class="btn btn-primary">@city</button>
 					</div>
 				</div>
-				
+
 			</div>
 		}
 	</div>
@@ -47,12 +47,29 @@
 			<text>&nbsp;</text>
 			@* <a href="/servers/edit" class="btn btn-link">Edit</a> *@
 			<a href="/servers/@server.ServerId" class="btn btn-link">Edit</a>
+
+			<text>&nbsp;</text>
+			<EditForm Model="server" FormName="@($"form-server-{server.ServerId}")"
+					  OnInvalidSubmit="@(()=>{DeleteServer(server.ServerId);})">
+				<button type="submit" class="btn btn-primary">Delete</button>
+			</EditForm>
+			
 		</li>
 	}
 </ul>
-
+<p>
+	<a href="/servers/add" class="btn btn-primary">Add Server</a>
+</p>
 @code {
 	private List<Server> servers = ServersRepository.GetServersByCity("Toronto");
 
 	private List<String> cities = CitiesRepository.GetCities();
+
+	private void DeleteServer(int serverId)
+	{
+		if(serverId > 0)
+		{
+			ServersRepository.DeleteServer(serverId);
+		}
+	}
 }

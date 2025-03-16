@@ -1,7 +1,11 @@
 ﻿@* @page "/servers/edit" *@
 @* @page "/servers/{id}" *@
 @page "/servers/{id:int}"
+
+@inject NavigationManager NavigationManager
 <h3>Edit Server</h3>
+
+
 
 @* @if(server != null)
 {
@@ -87,6 +91,7 @@
 		{
 			ServersRepository.UpdateServer(server.ServerId, server);
 		}
+		NavigationManager.NavigateTo("/servers");
 	}
 
 	// protected override Task OnParametersSetAsync()
