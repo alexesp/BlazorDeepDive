@@ -1,7 +1,7 @@
 ﻿@page "/servers"
 
 
-
+@inject NavigationManager NavigationManager
 
 <h3>Servers</h3>
 
@@ -50,10 +50,10 @@
 
 			<text>&nbsp;</text>
 			<EditForm Model="server" FormName="@($"form-server-{server.ServerId}")"
-					  OnInvalidSubmit="@(()=>{DeleteServer(server.ServerId);})">
+			OnInvalidSubmit="@(()=>{DeleteServer(server.ServerId);})">
 				<button type="submit" class="btn btn-primary">Delete</button>
 			</EditForm>
-			
+
 		</li>
 	}
 </ul>
@@ -70,6 +70,7 @@
 		if(serverId > 0)
 		{
 			ServersRepository.DeleteServer(serverId);
+			NavigationManager.NavigateTo("/servers");
 		}
 	}
 }
