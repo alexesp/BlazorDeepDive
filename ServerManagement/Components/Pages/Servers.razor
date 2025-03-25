@@ -2,6 +2,7 @@
 
 
 @inject NavigationManager NavigationManager
+@* @rendermode InteractiveServer *@
 
 <h3>Servers</h3>
 
@@ -30,7 +31,7 @@
 	<text>&nbsp;</text>
 } *@
 
-@* <ServerComponent></ServerComponent> *@
+<ServerComponent @rendermode="InteractiveServer"></ServerComponent>
 
 <br />
 
@@ -49,8 +50,10 @@
 			<a href="/servers/@server.ServerId" class="btn btn-link">Edit</a>
 
 			<text>&nbsp;</text>
-			<EditForm Model="server" FormName="@($"form-server-{server.ServerId}")"
-			OnInvalidSubmit="@(()=>{DeleteServer(server.ServerId);})">
+			<EditForm
+				Model="server" 
+				FormName="@($"form-server-{server.ServerId}")"
+					  OnInvalidSubmit="@(() => { DeleteServer(server.ServerId); })">
 				<button type="submit" class="btn btn-primary">Delete</button>
 			</EditForm>
 
