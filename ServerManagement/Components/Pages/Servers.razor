@@ -1,5 +1,6 @@
 ﻿@page "/servers"
 
+@rendermode InteractiveServer
 
 @inject NavigationManager NavigationManager
 @* @rendermode InteractiveServer *@
@@ -14,10 +15,10 @@
 		{
 			<div class="col">
 				@* <div class="card" style="width: 7rem;"> *@
-				<div class="card" style="width: 7rem;">
+				<div class="card @(selectedCity.Equals(city, StringComparison.OrdinalIgnoreCase)?"border-primary":"")">
 					<img class="card-img-top" src="@($"/images/{city}.png")" alt="...">
 					<div class="card-body">
-						<button type="button" class="btn btn-primary">@city</button>
+						<button type="button" class="btn btn-primary" @onclick="@(() => {SelectCity(city);})">@city</button>
 					</div>
 				</div>
 
@@ -25,17 +26,31 @@
 		}
 	</div>
 </div>
+
+@* @selectedCity *@
 @* @foreach (var city in cities)
 {
 	<button type="button" class="btn btn-primary">@city</button>
 	<text>&nbsp;</text>
 } *@
-
-<ServerComponent @rendermode="InteractiveServer"></ServerComponent>
+<text>&nbsp;</text>
+@* <ServerComponent @rendermode="InteractiveServer"></ServerComponent> *@
 
 <br />
 
-@* <ServerComponent></ServerComponent> *@
+<ServerComponent></ServerComponent>
+
+<br />
+
+<div class="input-group mb-3">
+	<input type="text" class="form-control" placeholder="Search Servers" @bind-value="serverFilter" />
+	@* <input type="text" class="form-control" placeholder="Search Servers" @onchange="HandleServerFilterChange"/> *@
+	<button class="btn btn-outline-secondary" type="button" id="button-search" @onclick="HandleSearch">Search</button>
+</div>
+
+@* @serverFilter
+ *@
+<br />
 
 <ul>
 	@foreach (var server in servers)
@@ -51,22 +66,31 @@
 
 			<text>&nbsp;</text>
 			<EditForm
-				Model="server" 
-				FormName="@($"form-server-{server.ServerId}")"
-					  OnInvalidSubmit="@(() => { DeleteServer(server.ServerId); })">
+			Model="server" 
+			FormName="@($"form-server-{server.ServerId}")"
+			OnInvalidSubmit="@(() => { DeleteServer(server.ServerId); })">
 				<button type="submit" class="btn btn-primary">Delete</button>
 			</EditForm>
 
 		</li>
 	}
 </ul>
+
 <p>
 	<a href="/servers/add" class="btn btn-primary">Add Server</a>
+</p>
+
+<p>
+
 </p>
 @code {
 	private List<Server> servers = ServersRepository.GetServersByCity("Toronto");
 
 	private List<String> cities = CitiesRepository.GetCities();
+
+	private string selectedCity = "Toronto";
+
+	private string serverFilter = "";
 
 	private void DeleteServer(int serverId)
 	{
@@ -75,5 +99,24 @@
 			ServersRepository.DeleteServer(serverId);
 			NavigationManager.NavigateTo("/servers");
 		}
+	}
+
+	private void SelectCity(string cityName)
+	{
+		this.selectedCity = cityName;
+
+		this.servers = ServersRepository.GetServersByCity(this.selectedCity);
+	}
+
+	private void HandleServerFilterChange(ChangeEventArgs args)
+	{
+		serverFilter = args.Value?.ToString() ?? string.Empty;
+	}
+
+	private void HandleSearch()
+	{
+		this.servers = ServersRepository.SearchServers(serverFilter);
+
+		this.selectedCity = string.Empty;
 	}
 }
