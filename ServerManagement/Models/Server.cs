@@ -16,5 +16,6 @@ namespace ServerManagement.Models
         public string? Name { get; set; }
         [Required]
         public string? City { get; set; }
+
     }
 }

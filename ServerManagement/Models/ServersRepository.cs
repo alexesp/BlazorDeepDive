@@ -76,6 +76,8 @@
             }
         }
 
+
+
         public static List<Server> SearchServers(string serverFilter)
         {
             return servers.Where(s => s.Name.Contains(serverFilter, StringComparison.OrdinalIgnoreCase)).ToList();
