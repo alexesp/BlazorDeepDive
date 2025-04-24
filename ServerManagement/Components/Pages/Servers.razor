@@ -40,6 +40,7 @@
 
 <ServerComponent></ServerComponent>
 
+
 <br />
 
 <div class="input-group mb-3">
@@ -51,33 +52,8 @@
 @* @serverFilter
  *@
 <br />
+<ServerListComponent @rendermode="InteractiveServer"></ServerListComponent>
 
-<ul>
-	@foreach (var server in servers)
-	{
-		<li @key="server.ServerId">
-
-
-
-			@server.Name in @server.City is
-			<span style="color:@(server.IsOnline ? "green" : "red");">
-				@(server.IsOnline ? "online" : "offline");
-			</span>
-			<text>&nbsp;</text>
-			@* <a href="/servers/edit" class="btn btn-link">Edit</a> *@
-			<a href="/servers/@server.ServerId" class="btn btn-link">Edit</a>
-
-			<text>&nbsp;</text>
-			<EditForm
-			Model="server" 
-			FormName="@($"form-server-{server.ServerId}")"
-			OnInvalidSubmit="@(() => { DeleteServer(server.ServerId); })">
-				<button type="submit" class="btn btn-primary">Delete</button>
-			</EditForm>
-
-		</li>
-	}
-</ul>
 
 <p>
 	<a href="/servers/add" class="btn btn-primary">Add Server</a>
@@ -87,7 +63,7 @@
 
 </p>
 @code {
-	private List<Server> servers = ServersRepository.GetServersByCity("Toronto");
+	
 
 	private List<String> cities = CitiesRepository.GetCities();
 
@@ -95,26 +71,19 @@
 
 	private string serverFilter = "";
 
-	private void DeleteServer(int serverId)
-	{
-		if(serverId > 0)
-		{
-			ServersRepository.DeleteServer(serverId);
-			NavigationManager.NavigateTo("/servers");
-		}
-	}
+	
 
 	private void SelectCity(string cityName)
 	{
 		this.selectedCity = cityName;
 
-		this.servers = ServersRepository.GetServersByCity(this.selectedCity);
+		//this.servers = ServersRepository.GetServersByCity(this.selectedCity);
 
 		if(cityName == "Halifax")
 		{
 			for (int i = 16;i < 40;i++)
 			{
-				servers.Add(new Server { ServerId = i, Name = $"Server{i}", City="Halifax"});
+				//servers.Add(new Server { ServerId = i, Name = $"Server{i}", City="Halifax"});
 			}
 		}
 	}
@@ -126,7 +95,7 @@
 
 	private void HandleSearch()
 	{
-		this.servers = ServersRepository.SearchServers(serverFilter);
+		//this.servers = ServersRepository.SearchServers(serverFilter);
 
 		this.selectedCity = string.Empty;
 	}
