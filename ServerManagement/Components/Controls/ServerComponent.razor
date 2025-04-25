@@ -1,10 +1,29 @@
-﻿
+﻿@inject NavigationManager NavigationManager
 <p>
-	@if(server != null)
+	@if(Server != null)
 	{
+		<li @key="Server.ServerId">
+			@Server.Name in @Server.City is
+			<span style="color:@(Server.IsOnline ? "green" : "red");">
+				@(Server.IsOnline ? "online" : "offline");
+			</span>
+			<text>&nbsp;</text>
+			@* <a href="/servers/edit" class="btn btn-link">Edit</a> *@
+			<a href="/servers/@Server.ServerId" class="btn btn-link">Edit</a>
+
+			<text>&nbsp;</text>
+			<EditForm Model="Server"
+					  FormName="@($"form-server-{Server.ServerId}")"
+					  OnInvalidSubmit="@(() => { DeleteServer(Server.ServerId); })">
+				<button type="submit" class="btn btn-primary">Delete</button>
+			</EditForm>
+
+		</li>
+
+
 		@* @status at @DateTime.Now *@
 
-		<EditForm Model="server" Enhance="true" FormName="serverComponentForm" OnSubmit="ChangeServerStatus">
+		@* <EditForm Model="server" Enhance="true" FormName="serverComponentForm" OnSubmit="ChangeServerStatus">
 
 			<InputNumber @bind-Value="server.ServerId" hidden></InputNumber>
 			<InputText @bind-Value="server.Name" hidden></InputText>
@@ -18,7 +37,7 @@
 				&nbsp;
 				<button type="button" class="btn btn-primary" @onclick="ChangeStatus">Turn On/Off</button>
 			</div>
-		</EditForm>
+		</EditForm> *@
 	}
 </p>
 
@@ -26,27 +45,37 @@
 	// private string status = "Server is offline";
 
 	// private Server server = new Server { Name = "Server 1", City = "Toronto" };
-	[SupplyParameterFromForm]
-	private Server? server { get; set; }
+	//[SupplyParameterFromForm]
+	[Parameter]
+	public Server? Server { get; set; }
 
 	protected override void OnParametersSet()
 	{
 		//Si server es null entonces inicializamos el objeto
-		server ??= new Server { Name = "Server 1", City = "Toronto" };
+		Server ??= new Server { Name = "Server 1", City = "Toronto" };
 	}
 
-	private void ChangeServerStatus()
+	private void DeleteServer(int serverId)
 	{
-		if (server != null)
+		if (serverId > 0)
 		{
-			this.server.IsOnline = !this.server.IsOnline;
+			ServersRepository.DeleteServer(serverId);
+			NavigationManager.NavigateTo("/servers", true);
 		}
 	}
-	private void ChangeStatus()
-	{
-		if (server != null)
-		{
-			this.server.IsOnline = !this.server.IsOnline;
-		}
-	}
+
+	// private void ChangeServerStatus()
+	// {
+	// 	if (server != null)
+	// 	{
+	// 		this.server.IsOnline = !this.server.IsOnline;
+	// 	}
+	// }
+	// private void ChangeStatus()
+	// {
+	// 	if (server != null)
+	// 	{
+	// 		this.server.IsOnline = !this.server.IsOnline;
+	// 	}
+	// }
 }

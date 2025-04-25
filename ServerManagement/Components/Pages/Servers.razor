@@ -9,23 +9,7 @@
 
 
 <br />
-<div class="container-fluid text-center">
-	<div class="row w-30">
-		@foreach (var city in cities)
-		{
-			<div class="col">
-				@* <div class="card" style="width: 7rem;"> *@
-				<div class="card @(selectedCity.Equals(city, StringComparison.OrdinalIgnoreCase)?"border-primary":"")">
-					<img class="card-img-top" src="@($"/images/{city}.png")" alt="...">
-					<div class="card-body">
-						<button type="button" class="btn btn-primary" @onclick="@(() => {SelectCity(city);})">@city</button>
-					</div>
-				</div>
-
-			</div>
-		}
-	</div>
-</div>
+<CityListComponent></CityListComponent>
 
 @* @selectedCity *@
 @* @foreach (var city in cities)
@@ -38,13 +22,16 @@
 
 <br />
 
-<ServerComponent></ServerComponent>
+@* <ServerComponent></ServerComponent> *@
 
 
 <br />
 
 <div class="input-group mb-3">
-	<input type="text" class="form-control" placeholder="Search Servers" @bind-value="serverFilter" />
+	<input type="text" class="form-control"
+	placeholder="Search Servers"
+	@bind-value="serverFilter" 
+	@bind-value:event="oninput"/>
 	@* <input type="text" class="form-control" placeholder="Search Servers" @onchange="HandleServerFilterChange"/> *@
 	<button class="btn btn-outline-secondary" type="button" id="button-search" @onclick="HandleSearch">Search</button>
 </div>
@@ -52,7 +39,10 @@
 @* @serverFilter
  *@
 <br />
-<ServerListComponent @rendermode="InteractiveServer"></ServerListComponent>
+<ServerListComponent @rendermode="InteractiveServer"
+					 CityName="Toronto">
+	@* CityName="@this.selectedCity"> *@
+</ServerListComponent>
 
 
 <p>
@@ -65,28 +55,28 @@
 @code {
 	
 
-	private List<String> cities = CitiesRepository.GetCities();
+	//private List<String> cities = CitiesRepository.GetCities();
 
-	private string selectedCity = "Toronto";
+	//private string selectedCity = "Toronto";
 
 	private string serverFilter = "";
 
 	
 
-	private void SelectCity(string cityName)
-	{
-		this.selectedCity = cityName;
+	// private void SelectCity(string cityName)
+	// {
+	// 	this.selectedCity = cityName;
 
-		//this.servers = ServersRepository.GetServersByCity(this.selectedCity);
+	// 	//this.servers = ServersRepository.GetServersByCity(this.selectedCity);
 
-		if(cityName == "Halifax")
-		{
-			for (int i = 16;i < 40;i++)
-			{
-				//servers.Add(new Server { ServerId = i, Name = $"Server{i}", City="Halifax"});
-			}
-		}
-	}
+	// 	if(cityName == "Halifax")
+	// 	{
+	// 		for (int i = 16;i < 40;i++)
+	// 		{
+	// 			//servers.Add(new Server { ServerId = i, Name = $"Server{i}", City="Halifax"});
+	// 		}
+	// 	}
+	// }
 
 	private void HandleServerFilterChange(ChangeEventArgs args)
 	{
@@ -97,6 +87,6 @@
 	{
 		//this.servers = ServersRepository.SearchServers(serverFilter);
 
-		this.selectedCity = string.Empty;
+		//this.selectedCity = string.Empty;
 	}
 }
