@@ -1,0 +1,35 @@
+﻿<div class="input-group mb-3">
+	<input type="text" class="form-control"
+	placeholder="Search Servers"
+	@bind-value="serverFilter"
+	@bind-value:event="oninput" />
+	@* <input type="text" class="form-control" placeholder="Search Servers" @onchange="HandleServerFilterChange"/> *@
+	<button class="btn btn-outline-secondary" type="button" id="button-search" @onclick="HandleSearch">Search</button>
+</div>
+@code {
+
+	[Parameter]
+	public EventCallback<string> SearchServerCallBack { get; set; }
+
+	private string serverFilter = "";
+
+
+	private void HandleServerFilterChange(ChangeEventArgs args)
+	{
+		serverFilter = args.Value?.ToString() ?? string.Empty;
+	}
+
+	private void HandleSearch()
+	{
+		//this.servers = ServersRepository.SearchServers(serverFilter);
+
+		//this.selectedCity = string.Empty;
+
+
+	}
+
+	private void HandleSeachServer(string searchFilter)
+	{
+		
+	}
+}
